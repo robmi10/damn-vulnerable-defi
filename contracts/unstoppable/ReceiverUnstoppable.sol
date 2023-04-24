@@ -26,7 +26,8 @@ contract ReceiverUnstoppable is Owned, IERC3156FlashBorrower {
         bytes calldata
     ) external returns (bytes32) {
         if (initiator != address(this) || msg.sender != address(pool) || token != address(pool.asset()) || fee != 0)
-            revert UnexpectedFlashLoan();
+            revert UnexpectedFlashLoan(); 
+        //@audit can I cause one of this to become false, maybe fee?
 
         ERC20(token).approve(address(pool), amount);
 

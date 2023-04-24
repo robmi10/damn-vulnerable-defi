@@ -11,6 +11,7 @@ import { IERC3156FlashBorrower, IERC3156FlashLender } from "@openzeppelin/contra
  * @title UnstoppableVault
  * @author Damn Vulnerable DeFi (https://damnvulnerabledefi.xyz)
  */
+
 contract UnstoppableVault is IERC3156FlashLender, ReentrancyGuard, Owned, ERC4626 {
     using SafeTransferLib for ERC20;
     using FixedPointMathLib for uint256;
@@ -53,7 +54,6 @@ contract UnstoppableVault is IERC3156FlashLender, ReentrancyGuard, Owned, ERC462
     function flashFee(address _token, uint256 _amount) public view returns (uint256 fee) {
         if (address(asset) != _token)
             revert UnsupportedCurrency();
-
         if (block.timestamp < end && _amount < maxFlashLoan(_token)) {
             return 0;
         } else {
@@ -93,7 +93,10 @@ contract UnstoppableVault is IERC3156FlashLender, ReentrancyGuard, Owned, ERC462
         if (amount == 0) revert InvalidAmount(0); // fail early
         if (address(asset) != _token) revert UnsupportedCurrency(); // enforce ERC3156 requirement
         uint256 balanceBefore = totalAssets();
+
         if (convertToShares(totalSupply) != balanceBefore) revert InvalidBalance(); // enforce ERC4626 requirement
+
+
         uint256 fee = flashFee(_token, amount);
         // transfer tokens out + execute callback on receiver
         ERC20(_token).safeTransfer(address(receiver), amount);
