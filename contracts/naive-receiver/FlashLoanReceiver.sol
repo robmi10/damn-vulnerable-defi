@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.0;
-
+import "hardhat/console.sol";
 import "solady/src/utils/SafeTransferLib.sol";
 import "@openzeppelin/contracts/interfaces/IERC3156FlashBorrower.sol";
 import "./NaiveReceiverLenderPool.sol";
