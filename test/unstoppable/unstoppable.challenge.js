@@ -52,9 +52,7 @@ describe("[Challenge] Unstoppable", function () {
   it("Execution", async function () {
     /** CODE YOUR SOLUTION HERE */
 
-    let maxFee = await vault.maxFlashLoan(token.address);
-
-    console.log({ maxFee });
+    await token.connect(player).transfer(vault.address, 10);
   });
 
   after(async function () {
