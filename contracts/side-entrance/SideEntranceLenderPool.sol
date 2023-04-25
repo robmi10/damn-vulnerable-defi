@@ -41,6 +41,8 @@ contract SideEntranceLenderPool {
 
         IFlashLoanEtherReceiver(msg.sender).execute{value: amount}();
 
+        // @audit can i make a flashloan and therafter deposit to change the balancebefore?
+
         if (address(this).balance < balanceBefore)
             revert RepayFailed();
     }
