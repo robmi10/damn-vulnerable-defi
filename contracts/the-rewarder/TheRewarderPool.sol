@@ -5,6 +5,7 @@ import "solady/src/utils/FixedPointMathLib.sol";
 import "solady/src/utils/SafeTransferLib.sol";
 import { RewardToken } from "./RewardToken.sol";
 import { AccountingToken } from "./AccountingToken.sol";
+import "hardhat/console.sol";
 
 /**
  * @title TheRewarderPool
@@ -40,7 +41,6 @@ contract TheRewarderPool {
         liquidityToken = _token;
         accountingToken = new AccountingToken();
         rewardToken = new RewardToken();
-
         _recordSnapshot();
     }
 
@@ -49,6 +49,7 @@ contract TheRewarderPool {
      *         Also distributes rewards if available.
      * @param amount amount of tokens to be deposited
      */
+    
     function deposit(uint256 amount) external {
         if (amount == 0) {
             revert InvalidDepositAmount();
@@ -72,6 +73,7 @@ contract TheRewarderPool {
 
     function distributeRewards() public returns (uint256 rewards) {
         if (isNewRewardsRound()) {
+            console.log("_recordSnapshot check");
             _recordSnapshot();
         }
 
