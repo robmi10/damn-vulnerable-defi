@@ -112,15 +112,12 @@ describe("[Challenge] The rewarder", function () {
 
     let isNewRewardsRound = await rewarderPool.isNewRewardsRound();
 
-    console.log({ isNewRewardsRound });
-
     await attacker.flashloanattack();
   });
 
   after(async function () {
     /** SUCCESS CONDITIONS - NO NEED TO CHANGE ANYTHING HERE */
     // Only one round must have taken place
-    console.log({ rewarderPool: await rewarderPool.roundNumber() });
     expect(await rewarderPool.roundNumber()).to.be.eq(3);
 
     // Users should get neglegible rewards this round
@@ -128,13 +125,11 @@ describe("[Challenge] The rewarder", function () {
       await rewarderPool.connect(users[i]).distributeRewards();
 
       const userRewards = await rewardToken.balanceOf(users[i].address);
-      console.log({ rewards: await rewarderPool.REWARDS() });
-      console.log({ userRewards });
+
       const delta = userRewards.sub(
         (await rewarderPool.REWARDS()).div(users.length)
       );
 
-      console.log({ delta });
       expect(delta).to.be.lt(10n ** 16n);
     }
 

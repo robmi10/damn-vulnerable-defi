@@ -55,7 +55,6 @@ contract TheRewarderPool {
             revert InvalidDepositAmount();
         }
 
-        console.log("inside deposit");
 
         accountingToken.mint(msg.sender, amount);
         distributeRewards();
@@ -89,9 +88,7 @@ contract TheRewarderPool {
         if (amountDeposited > 0 && totalDeposits > 0) {
             rewards = amountDeposited.mulDiv(REWARDS, totalDeposits);
             if (rewards > 0 && !_hasRetrievedReward(msg.sender)) {
-                console.log("totalDeposits ->", totalDeposits);
-                console.log("REWARDS ->", REWARDS);
-                console.log("rewards ->", rewards);
+             
                 rewardToken.mint(msg.sender, rewards);
                 lastRewardTimestamps[msg.sender] = uint64(block.timestamp);
             }
