@@ -104,12 +104,11 @@ describe("[Challenge] The rewarder", function () {
     let attacker = await attackerContract.deploy(
       flashLoanPool.address,
       rewarderPool.address,
-      liquidityToken.address
+      liquidityToken.address,
+      rewardToken.address
     );
 
     await ethers.provider.send("evm_increaseTime", [5 * 24 * 60 * 60]); // 5 days
-
-    // console.log({ attacker: await attacker });
 
     let isNewRewardsRound = await rewarderPool.isNewRewardsRound();
 
@@ -127,10 +126,15 @@ describe("[Challenge] The rewarder", function () {
     // Users should get neglegible rewards this round
     for (let i = 0; i < users.length; i++) {
       await rewarderPool.connect(users[i]).distributeRewards();
+
       const userRewards = await rewardToken.balanceOf(users[i].address);
+      console.log({ rewards: await rewarderPool.REWARDS() });
+      console.log({ userRewards });
       const delta = userRewards.sub(
         (await rewarderPool.REWARDS()).div(users.length)
       );
+
+      console.log({ delta });
       expect(delta).to.be.lt(10n ** 16n);
     }
 
