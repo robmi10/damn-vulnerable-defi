@@ -67,6 +67,8 @@ contract SelfiePool is ReentrancyGuard, IERC3156FlashLender {
     }
 
     function emergencyExit(address receiver) external onlyGovernance {
+        //@audit very suspect function can get control of it?
+        console.log("inside emergencyExit !");
         uint256 amount = token.balanceOf(address(this));
         token.transfer(receiver, amount);
 

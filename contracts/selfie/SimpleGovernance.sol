@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
+import "hardhat/console.sol";
 import "../DamnValuableTokenSnapshot.sol";
-import "./ISimpleGovernance.sol"
-;
+import "./ISimpleGovernance.sol";
+import "hardhat/console.sol";
 /**
  * @title SimpleGovernance
  * @author Damn Vulnerable DeFi (https://damnvulnerabledefi.xyz)
@@ -53,13 +53,12 @@ contract SimpleGovernance is ISimpleGovernance {
         actionToExecute.executedAt = uint64(block.timestamp);
 
         emit ActionExecuted(actionId, msg.sender);
-
         (bool success, bytes memory returndata) = actionToExecute.target.call{value: actionToExecute.value}(actionToExecute.data);
         if (!success) {
             if (returndata.length > 0) {
                 assembly {
                     revert(add(0x20, returndata), mload(returndata))
-                }
+                }   
             } else {
                 revert ActionFailed(actionId);
             }
@@ -100,12 +99,14 @@ contract SimpleGovernance is ISimpleGovernance {
             timeDelta = uint64(block.timestamp) - actionToExecute.proposedAt;
         }
 
+
         return actionToExecute.executedAt == 0 && timeDelta >= ACTION_DELAY_IN_SECONDS;
     }
 
     function _hasEnoughVotes(address who) private view returns (bool) {
         uint256 balance = _governanceToken.getBalanceAtLastSnapshot(who);
         uint256 halfTotalSupply = _governanceToken.getTotalSupplyAtLastSnapshot() / 2;
+
         return balance > halfTotalSupply;
     }
 }
