@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
+import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "solady/src/utils/LibSort.sol";
 
@@ -51,6 +51,7 @@ contract TrustfulOracle is AccessControlEnumerable {
         renounceRole(INITIALIZER_ROLE, msg.sender);
     }
 
+    //@audit onlyRole doesnt have any modifier? Anyone can call this function...
     function postPrice(string calldata symbol, uint256 newPrice) external onlyRole(TRUSTED_SOURCE_ROLE) {
         _setPrice(msg.sender, symbol, newPrice);
     }

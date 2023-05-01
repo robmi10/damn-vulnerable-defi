@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./TrustfulOracle.sol";
 import "../DamnValuableNFT.sol";
-
+import "hardhat/console.sol";
 /**
  * @title Exchange
  * @author Damn Vulnerable DeFi (https://damnvulnerabledefi.xyz)
@@ -36,13 +36,15 @@ contract Exchange is ReentrancyGuard {
 
         // Price should be in [wei / NFT]
         uint256 price = oracle.getMedianPrice(token.symbol());
+        //@audit What is the price?
+
         if (msg.value < price)
             revert InvalidPayment();
 
         id = token.safeMint(msg.sender);
         unchecked {
             payable(msg.sender).sendValue(msg.value - price);
-        }
+        }   
 
         emit TokenBought(msg.sender, id, price);
     }
